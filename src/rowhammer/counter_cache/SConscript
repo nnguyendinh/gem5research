@@ -1,0 +1,9 @@
+Import('*')
+
+SimObject('RhSecureModule.py', sim_objects=['RhSecureModule'])
+
+Source('rh_secure_module.cc')
+
+DebugFlag('RhSecureModuleCycles', "print debug statements at every cycle")
+DebugFlag('RhSecureModuleCpp', "debugging cpp")
+DebugFlag('RhSecureModule', "debugging transactions")

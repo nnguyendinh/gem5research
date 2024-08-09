@@ -517,14 +517,19 @@ def run(options, root, testsys, cpu_class):
 
     # switching to a future class
     if cpu_class:
-
         # NATHAN CODE TAKE OUT LATER MAYBE
-        if (options.fetch2ToDecodeForwardDelay or options.decodeToExecuteForwardDelay 
-            or options.executeBranchDelay):
-            print("HELL YEAAAAA")
-            print("fetch2ToDecodeForwardDelay: ", options.fetch2ToDecodeForwardDelay)
-            print("decodeToExecuteForwardDelay: ", options.decodeToExecuteForwardDelay)
-            print("executeBranchDelay: ", options.executeBranchDelay)
+        # If options has an attribute called fetch2ToDecodeForwardDelay
+        # then we are using the switched out CPU
+        if hasattr(options, 'fetch2ToDecodeForwardDelay'):
+            # print(
+            #     "fetch2ToDecodeForwardDelay: ",
+            #     options.fetch2ToDecodeForwardDelay,
+            # )
+            # print(
+            #     "decodeToExecuteForwardDelay: ",
+            #     options.decodeToExecuteForwardDelay,
+            # )
+            # print("executeBranchDelay: ", options.executeBranchDelay)
             switch_cpus = [
                 cpu_class(
                     fetch2ToDecodeForwardDelay=options.fetch2ToDecodeForwardDelay,
@@ -535,6 +540,48 @@ def run(options, root, testsys, cpu_class):
                 )
                 for i in range(np)
             ]
+        elif hasattr(options, 'decodeToFetchDelay'):  # NATHAN CODE TAKE OUT LATER MAYBE
+            # print("HELL YEAAAAA 2")
+            # print("decodeToFetchDelay: ", options.decodeToFetchDelay)
+            # print("renameToFetchDelay: ", options.renameToFetchDelay)
+            # print("iewToFetchDelay: ", options.iewToFetchDelay)
+            # print("commitToFetchDelay: ", options.commitToFetchDelay)
+            # print("renameToDecodeDelay: ", options.renameToDecodeDelay)
+            # print("iewToDecodeDelay: ", options.iewToDecodeDelay)
+            # print("commitToDecodeDelay: ", options.commitToDecodeDelay)
+            # print("fetchToDecodeDelay: ", options.fetchToDecodeDelay)
+            # print("iewToRenameDelay: ", options.iewToRenameDelay)cd 
+            # print("commitToRenameDelay: ", options.commitToRenameDelay)
+            # print("decodeToRenameDelay: ", options.decodeToRenameDelay)
+            # print("commitToIEWDelay: ", options.commitToIEWDelay)
+            # print("renameToIEWDelay: ", options.renameToIEWDelay)
+            # print("issueToExecuteDelay: ", options.issueToExecuteDelay)
+            # print("iewToCommitDelay: ", options.iewToCommitDelay)
+            # print("renameToROBDelay: ", options.renameToROBDelay)
+            switch_cpus = [
+                cpu_class(
+                    decodeToFetchDelay=options.decodeToFetchDelay,
+                    renameToFetchDelay=options.renameToFetchDelay,
+                    iewToFetchDelay=options.iewToFetchDelay,
+                    commitToFetchDelay=options.commitToFetchDelay,
+                    renameToDecodeDelay=options.renameToDecodeDelay,
+                    iewToDecodeDelay=options.iewToDecodeDelay,
+                    commitToDecodeDelay=options.commitToDecodeDelay,
+                    fetchToDecodeDelay=options.fetchToDecodeDelay,
+                    iewToRenameDelay=options.iewToRenameDelay,
+                    commitToRenameDelay=options.commitToRenameDelay,
+                    decodeToRenameDelay=options.decodeToRenameDelay,
+                    commitToIEWDelay=options.commitToIEWDelay,
+                    renameToIEWDelay=options.renameToIEWDelay,
+                    issueToExecuteDelay=options.issueToExecuteDelay,
+                    iewToCommitDelay=options.iewToCommitDelay,
+                    renameToROBDelay=options.renameToROBDelay,
+                    switched_out=True,
+                    cpu_id=(i),
+                )
+                for i in range(np)
+            ]
+
         else:
             switch_cpus = [
                 cpu_class(switched_out=True, cpu_id=(i)) for i in range(np)

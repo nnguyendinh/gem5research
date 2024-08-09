@@ -102,14 +102,60 @@ class X86O3CPU(BaseO3CPU, X86CPU):
     # of the quotient.
     fuPool = DefaultX86FUPool()
 
+class X86O3CPUChipletized(X86O3CPU):
+    def __init__(
+        self,
+        decodeToFetchDelay,
+        renameToFetchDelay,
+        iewToFetchDelay,
+        commitToFetchDelay,
+        renameToDecodeDelay,
+        iewToDecodeDelay,
+        commitToDecodeDelay,
+        fetchToDecodeDelay,
+        iewToRenameDelay,
+        commitToRenameDelay,
+        decodeToRenameDelay,
+        commitToIEWDelay,
+        renameToIEWDelay,
+        issueToExecuteDelay,
+        iewToCommitDelay,
+        renameToROBDelay,
+        *args,
+        **kwargs
+    ):
+        super().__init__(*args, **kwargs)
+        self.decodeToFetchDelay = decodeToFetchDelay
+        self.renameToFetchDelay = renameToFetchDelay
+        self.iewToFetchDelay = iewToFetchDelay
+        self.commitToFetchDelay = commitToFetchDelay
+        self.renameToDecodeDelay = renameToDecodeDelay
+        self.iewToDecodeDelay = iewToDecodeDelay
+        self.commitToDecodeDelay = commitToDecodeDelay
+        self.fetchToDecodeDelay = fetchToDecodeDelay
+        self.iewToRenameDelay = iewToRenameDelay
+        self.commitToRenameDelay = commitToRenameDelay
+        self.decodeToRenameDelay = decodeToRenameDelay
+        self.commitToIEWDelay = commitToIEWDelay
+        self.renameToIEWDelay = renameToIEWDelay
+        self.issueToExecuteDelay = issueToExecuteDelay
+        self.iewToCommitDelay = iewToCommitDelay
+        self.renameToROBDelay = renameToROBDelay
+
 
 class X86MinorCPU(BaseMinorCPU, X86CPU):
     mmu = X86MMU()
-    
+
+
 class X86MinorCPUChipletized(X86MinorCPU):
-    def __init__(self, fetch2ToDecodeForwardDelay, 
-                 decodeToExecuteForwardDelay,  
-                 executeBranchDelay, *args, **kwargs):
+    def __init__(
+        self,
+        fetch2ToDecodeForwardDelay,
+        decodeToExecuteForwardDelay,
+        executeBranchDelay,
+        *args,
+        **kwargs
+    ):
         super().__init__(*args, **kwargs)
         self.fetch2ToDecodeForwardDelay = fetch2ToDecodeForwardDelay
         self.decodeToExecuteForwardDelay = decodeToExecuteForwardDelay

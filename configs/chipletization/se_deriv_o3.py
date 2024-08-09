@@ -142,20 +142,98 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--fetch2ToDecodeForwardDelay",
-    help="Forward cycle delay from Fetch2 to Decode (1 means next cycle)",
+    "--decodeToFetchDelay",
+    help="Decode to fetch delay",
     default=1,
 )
 
 parser.add_argument(
-    "--decodeToExecuteForwardDelay",
-    help="Forward cycle delay from Decode to Execute (1 means next cycle)",
+    "--renameToFetchDelay",
+    help="Rename to fetch delay",
     default=1,
 )
 
 parser.add_argument(
-    "--executeBranchDelay",
-    help="Delay from Execute deciding to branch and Fetch1 reacting (1 means next cycle)",
+    "--iewToFetchDelay",
+    help="Issue/Execute/Writeback to fetch delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--commitToFetchDelay",
+    help="Commit to fetch delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--renameToDecodeDelay",
+    help="Rename to decode delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--iewToDecodeDelay",
+    help="Issue/Execute/Writeback to decode delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--commitToDecodeDelay",
+    help="Commit to decode delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--fetchToDecodeDelay",
+    help="Fetch to decode delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--iewToRenameDelay",
+    help="Issue/Execute/Writeback to rename delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--commitToRenameDelay",
+    help="Commit to rename delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--decodeToRenameDelay",
+    help="Decode to rename delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--commitToIEWDelay",
+    help="Commit to Issue/Execute/Writeback delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--renameToIEWDelay",
+    help="Rename to Issue/Execute/Writeback delay",
+    default=2,
+)
+
+parser.add_argument(
+    "--issueToExecuteDelay",
+    help="Issue to execute delay (internal to the IEW stage)",
+    default=1,
+)
+
+parser.add_argument(
+    "--iewToCommitDelay",
+    help="Issue/Execute/Writeback to commit delay",
+    default=1,
+)
+
+parser.add_argument(
+    "--renameToROBDelay",
+    help="Rename to reorder buffer delay",
     default=1,
 )
 
@@ -166,12 +244,27 @@ parser.add_argument(
     default="1GHz",
 )
 
-# Make delays same
+# Homogenous delays
 parser.add_argument(
-    "--homogenous_delays",
-    help="Make the delays the same as decodeToExecuteForwardDelay",
-    default=False,
+    "--homogenousIEWDelays",
+    help="IEW Delays set to be homogenous",
 )
+
+parser.add_argument(
+    "--homogenousRenameDelays",
+    help="Rename Delays set to be homogenous",
+)
+
+parser.add_argument(
+    "--homogenousFetchDelays",
+    help="Fetch Delays set to be homogenous",
+)
+
+parser.add_argument(
+    "--homogenousDecodeDelays",
+    help="Decode Delays set to be homogenous",
+)
+
 
 if "--ruby" in sys.argv:
     Ruby.define_options(parser)
@@ -209,8 +302,8 @@ depending on the options provided.
 """
 warn('Override "args.cpu_type" command line argument')
 warn("OTHER CLI ARGUMENTS ARE BEING OVERRIDDEN!")
-args.cpu_type = "X86MinorCPUChipletized"
-# args.cpu_type = "DerivO3CPU"
+# args.cpu_type = "X86MinorCPUChipletized"
+args.cpu_type = "X86O3CPUChipletized"
 # args.sys_clock = "3.2GHz"
 args.caches = True
 args.l1i_cache = "16KB"
@@ -221,9 +314,40 @@ args.l2_size = "8MB"
 args.mem_size = "16GB"
 # --l1d_size L1D_SIZE] [--l1i_size L1I_SIZE
 
-if args.homogenous_delays:
-    args.fetch2ToDecodeForwardDelay = args.decodeToExecuteForwardDelay
-    args.executeBranchDelay = args.decodeToExecuteForwardDelay
+if args.homogenousIEWDelays:
+    args.iewToFetchDelay = args.commitToIEWDelay
+    args.iewToDecodeDelay = args.commitToIEWDelay
+    args.iewToRenameDelay = args.commitToIEWDelay
+    args.commitToIEWDelay = args.commitToIEWDelay
+    args.renameToIEWDelay = args.commitToIEWDelay
+    args.iewToCommitDelay = args.commitToIEWDelay
+    print("Homogenous IEW Delays set to: ", args.homogenousIEWDelays)
+
+if args.homogenousRenameDelays:
+    args.renameToDecodeDelay = args.homogenousRenameDelays
+    args.renameToDecodeDelay = args.homogenousRenameDelays
+    args.iewToRenameDelay = args.homogenousRenameDelays
+    args.commitToRenameDelay = args.homogenousRenameDelays
+    args.decodeToRenameDelay = args.homogenousRenameDelays
+    args.renameToIEWDelay = args.homogenousRenameDelays
+    args.renameToROBDelay = args.homogenousRenameDelays
+    print("Homogenous Rename Delays set to: ", args.homogenousRenameDelays)
+
+if args.homogenousFetchDelays:
+    args.decodeToFetchDelay = args.homogenousFetchDelays
+    args.renameToFetchDelay = args.homogenousFetchDelays
+    args.iewToFetchDelay = args.homogenousFetchDelays
+    args.commitToFetchDelay = args.homogenousFetchDelays
+    args.fetchToDecodeDelay = args.homogenousFetchDelays
+    print("Homogenous Fetch Delays set to: ", args.homogenousFetchDelays)
+
+if args.homogenousDecodeDelays:
+    args.decodeToFetchDelay = args.homogenousDecodeDelays
+    args.renameToDecodeDelay = args.homogenousDecodeDelays
+    args.iewToDecodeDelay = args.homogenousDecodeDelays
+    args.commitToDecodeDelay = args.homogenousDecodeDelays
+    args.fetchToDecodeDelay = args.homogenousDecodeDelays
+    print("Homogenous Decode Delays set to: ", args.homogenousDecodeDelays)
 
 TmpClass, test_mem_mode = getCPUClass(args.cpu_type)
 CPUClass = None

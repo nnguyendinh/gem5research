@@ -519,11 +519,22 @@ def run(options, root, testsys, cpu_class):
     if cpu_class:
 
         # NATHAN CODE TAKE OUT LATER MAYBE
-        if type(cpu_class) == tuple:
+        if (options.fetch2ToDecodeForwardDelay or options.decodeToExecuteForwardDelay 
+            or options.executeBranchDelay):
+            print("HELL YEAAAAA")
+            print("fetch2ToDecodeForwardDelay: ", options.fetch2ToDecodeForwardDelay)
+            print("decodeToExecuteForwardDelay: ", options.decodeToExecuteForwardDelay)
+            print("executeBranchDelay: ", options.executeBranchDelay)
             switch_cpus = [
-                cpu_class[0](cpu_class[1], switched_out=True, cpu_id=(i)) for i in range(np)
+                cpu_class(
+                    fetch2ToDecodeForwardDelay=options.fetch2ToDecodeForwardDelay,
+                    decodeToExecuteForwardDelay=options.decodeToExecuteForwardDelay,
+                    executeBranchDelay=options.executeBranchDelay,
+                    switched_out=True,
+                    cpu_id=(i),
+                )
+                for i in range(np)
             ]
-            print(switch_cpus)
         else:
             switch_cpus = [
                 cpu_class(switched_out=True, cpu_id=(i)) for i in range(np)

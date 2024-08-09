@@ -142,10 +142,35 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--dtoe_delay", 
+    "--fetch2ToDecodeForwardDelay", 
+    help="Forward cycle delay from Fetch2 to Decode (1 means next cycle)", 
     default=1,
-    type=int,
-    help="How many cycles of delay between Decode and Execute stages", 
+)
+
+parser.add_argument(
+    "--decodeToExecuteForwardDelay", 
+    help="Forward cycle delay from Decode to Execute (1 means next cycle)", 
+    default=1,
+)
+
+parser.add_argument(
+    "--executeBranchDelay", 
+    help="Delay from Execute deciding to branch and Fetch1 reacting (1 means next cycle)", 
+    default=1,
+)
+
+# Add argument for clock frequency
+parser.add_argument(
+    "--sys_clock",
+    help="Clock frequency of the system",
+    default="1GHz",
+)
+
+# Make delays same
+parser.add_argument(
+    "--homogenous_delays",
+    help="Make the delays the same as decodeToExecuteForwardDelay",
+    default=False,
 )
 
 if "--ruby" in sys.argv:
@@ -195,6 +220,10 @@ args.l2cache = True
 args.l2_size = "8MB"
 args.mem_size = "16GB"
 # --l1d_size L1D_SIZE] [--l1i_size L1I_SIZE
+
+if args.homogenous_delays:
+    args.fetch2ToDecodeForwardDelay = args.decodeToExecuteForwardDelay
+    args.executeBranchDelay = args.decodeToExecuteForwardDelay
 
 TmpClass, test_mem_mode = getCPUClass(args.cpu_type)
 CPUClass = None
@@ -343,4 +372,4 @@ if args.wait_gdb:
 
 root = Root(full_system=False, system=system)
 
-Simulation.run(args, root, system, (FutureClass, args.dtoe_delay))
+Simulation.run(args, root, system, FutureClass)

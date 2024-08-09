@@ -107,6 +107,10 @@ class X86MinorCPU(BaseMinorCPU, X86CPU):
     mmu = X86MMU()
     
 class X86MinorCPUChipletized(X86MinorCPU):
-    def __init__(self, decode_to_execute_forward_delay, *args, **kwargs):
+    def __init__(self, fetch2ToDecodeForwardDelay, 
+                 decodeToExecuteForwardDelay,  
+                 executeBranchDelay, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.decodeToExecuteForwardDelay = decode_to_execute_forward_delay
+        self.fetch2ToDecodeForwardDelay = fetch2ToDecodeForwardDelay
+        self.decodeToExecuteForwardDelay = decodeToExecuteForwardDelay
+        self.executeBranchDelay = executeBranchDelay

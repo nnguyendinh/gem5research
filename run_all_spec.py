@@ -55,12 +55,13 @@ spec_cmds = [
         "bin": "perlbench_r_base.main-m64",
         "opts": "-I./lib splitmail.pl 535 13 25 24 1091 1",
     },
-    {
-        "name": "gcc_r",
-        "path": f"{spec_path}/502.gcc_r/run/run_base_train_main-m64.0000/",
-        "bin": "cpugcc_r_base.main-m64",
-        "opts": "train01.c -O3 -finline-limit=50000 -o train01.opts-O3_-finline-limit_50000.s",
-    },
+    # TODO: Something went wrong here. Likely failed during fast forward
+    # {
+    #     "name": "gcc_r",
+    #     "path": f"{spec_path}/502.gcc_r/run/run_base_train_main-m64.0000/",
+    #     "bin": "cpugcc_r_base.main-m64",
+    #     "opts": "train01.c -O3 -finline-limit=50000 -o train01.opts-O3_-finline-limit_50000.s",
+    # },
     # TODO: fix the handling of the input file for this benchmark
     # {
     #     "name": "bwaves_r",
@@ -104,24 +105,26 @@ spec_cmds = [
         "bin": "omnetpp_r_base.main-m64",
         "opts": "-c General -r 0",
     },
-    {
-        "name": "wrf_r",
-        "path": f"{spec_path}/521.wrf_r/run/run_base_train_main-m64.0000/",
-        "bin": "wrf_r_base.main-m64",
-        "opts": "namelist.input",
-    },
+    # TODO: Something went wrong here. Likely failed during fast forward
+    # {
+    #     "name": "wrf_r",
+    #     "path": f"{spec_path}/521.wrf_r/run/run_base_train_main-m64.0000/",
+    #     "bin": "wrf_r_base.main-m64",
+    #     "opts": "namelist.input",
+    # },
     {
         "name": "xalancbmk_r",
         "path": f"{spec_path}/523.xalancbmk_r/run/run_base_train_main-m64.0000/",
         "bin": "cpuxalan_r_base.main-m64",
         "opts": "allbooks.xml xalanc.xsl",
     },
-    {
-        "name": "x264_r",
-        "path": f"{spec_path}/525.x264_r/run/run_base_train_main-m64.0000/",
-        "bin": "x264_r_base.main-m64",
-        "opts": "--dumpyuv 50 --frames 142 -o BuckBunny_New.264 BuckBunny.yuv 1280x720",
-    },
+    # TODO: Something went wrong here. Likely failed during fast forward
+    # {
+    #     "name": "x264_r",
+    #     "path": f"{spec_path}/525.x264_r/run/run_base_train_main-m64.0000/",
+    #     "bin": "x264_r_base.main-m64",
+    #     "opts": "--dumpyuv 50 --frames 142 -o BuckBunny_New.264 BuckBunny.yuv 1280x720",
+    # },
     {
         "name": "blender_r",
         "path": f"{spec_path}/526.blender_r/run/run_base_train_main-m64.0000/",
@@ -163,11 +166,12 @@ spec_cmds = [
         "bin": "exchange2_r_base.main-m64",
         "opts": "1",
     },
-    {
-        "name": "fotonik3d_r",
-        "path": f"{spec_path}/549.fotonik3d_r/run/run_base_train_main-m64.0000/",
-        "bin": "fotonik3d_r_base.main-m64",
-    },
+    # TODO: Something went wrong here. Likely failed during fast forward
+    # {
+    #     "name": "fotonik3d_r",
+    #     "path": f"{spec_path}/549.fotonik3d_r/run/run_base_train_main-m64.0000/",
+    #     "bin": "fotonik3d_r_base.main-m64",
+    # },
     # TODO: fix input
     # {
     #     "name": "roms_r",
@@ -218,7 +222,11 @@ redirect = args.redirect
 # these are the params you want to change accross each run. For example, "cache miss latency" may be one paramter you want to see given multiple benchmarks
 # set these as key value pairs
 permutable_params = {
-    "dtoe_delay": [1, 5],
+    "fetch2ToDecodeForwardDelay": [1],
+    "decodeToExecuteForwardDelay": [1, 5, 20],
+    "executeBranchDelay": [1],
+    "sys_clock": ["1GHz", "2GHz"],
+    "homogenous_delays": [True],
 }
 all_permutations = [
     dict(zip(permutable_params.keys(), p))

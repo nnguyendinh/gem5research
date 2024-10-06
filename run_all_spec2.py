@@ -210,19 +210,20 @@ os.makedirs(trace_dir, exist_ok=True)
 
 # static parameters
 # these are the params you want to keep constant accross each run. For example, "cache size" may be one paramter you want to keep constant accross all benchmarks
-fast_forward = 10000000
-maxinsts = 250000000
-# fast_forward = 200000 
-# maxinsts = 5000000
+# fast_forward = 10000000
+# maxinsts = 250000000
+fast_forward = 200000 
+maxinsts = 5000000
 redirect = args.redirect
 
 # permutable paramters
 # these are the params you want to change accross each run. For example, "cache miss latency" may be one paramter you want to see given multiple benchmarks
 # set these as key value pairs
 permutable_params = {
-    "fetchToDecodeDelay": [1],
-    "decodeToRenameDelay": [1],
-    "renameToIEWDelay": [1, 5, 20],
+    # "fetchToDecodeDelay": [1],
+    # "decodeToRenameDelay": [1],
+    # "renameToIEWDelay": [1, 5, 20],
+    "homogenousMainStageDelays": [1, 5, 20],
     "sys_clock": ["1GHz", "2GHz"],
 }
 all_permutations = [
@@ -322,7 +323,7 @@ num_threads = len(cmd_strs)
 print("\n" * num_threads)  # Create initial space for the status lines
 with concurrent.futures.ThreadPoolExecutor(
     # max_workers=os.cpu_count()
-    max_workers=8
+    max_workers=12
 ) as executor:
     # Record the start time for each thread and submit the tasks
     start_times = [time.time() for _ in range(num_threads)]

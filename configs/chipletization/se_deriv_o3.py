@@ -265,6 +265,10 @@ parser.add_argument(
     help="Decode Delays set to be homogenous",
 )
 
+parser.add_argument(
+    "--homogenousMainStageDelays",
+    help="Main Pipeline Stage Delays set to be homogenous",
+)
 
 if "--ruby" in sys.argv:
     Ruby.define_options(parser)
@@ -348,6 +352,12 @@ if args.homogenousDecodeDelays:
     args.commitToDecodeDelay = args.homogenousDecodeDelays
     args.fetchToDecodeDelay = args.homogenousDecodeDelays
     print("Homogenous Decode Delays set to: ", args.homogenousDecodeDelays)
+
+if args.homogenousMainStageDelays:
+    args.fetchToDecodeDelay = args.homogenousMainStageDelays
+    args.decodeToRenameDelay = args.homogenousMainStageDelays
+    args.renameToIEWDelay = args.homogenousMainStageDelays
+    print("Main Pipeline Stage Delays set to: ", args.homogenousMainStageDelays)
 
 TmpClass, test_mem_mode = getCPUClass(args.cpu_type)
 CPUClass = None

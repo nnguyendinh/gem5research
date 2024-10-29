@@ -237,6 +237,18 @@ parser.add_argument(
     default=1,
 )
 
+parser.add_argument(
+    "--forwardComSize",
+    help="Time buffer size for forwards communication",
+    default=5,
+)
+
+parser.add_argument(
+    "--backComSize",
+    help="Time buffer size for backwards communication",
+    default=5,
+)
+
 # Add argument for clock frequency
 parser.add_argument(
     "--sys_clock",
@@ -358,6 +370,12 @@ if args.homogenousMainStageDelays:
     args.decodeToRenameDelay = args.homogenousMainStageDelays
     args.renameToIEWDelay = args.homogenousMainStageDelays
     print("Main Pipeline Stage Delays set to: ", args.homogenousMainStageDelays)
+
+# Handle time buffer sizes not being big enough
+if any(int(args.forwardComSize) < delay for delay in \
+        [int(args.fetchToDecodeDelay), int(args.decodeToRenameDelay), int(args.renameToIEWDelay)]):
+    args.forwardComSize = str(max([int(args.fetchToDecodeDelay), int(args.decodeToRenameDelay), int(args.renameToIEWDelay)]))
+    args.backComSize = str(max([int(args.fetchToDecodeDelay), int(args.decodeToRenameDelay), int(args.renameToIEWDelay)]))
 
 TmpClass, test_mem_mode = getCPUClass(args.cpu_type)
 CPUClass = None

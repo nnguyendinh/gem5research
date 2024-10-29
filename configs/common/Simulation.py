@@ -576,6 +576,8 @@ def run(options, root, testsys, cpu_class):
                     issueToExecuteDelay=options.issueToExecuteDelay,
                     iewToCommitDelay=options.iewToCommitDelay,
                     renameToROBDelay=options.renameToROBDelay,
+                    forwardComSize=options.forwardComSize,
+                    backComSize=options.backComSize,
                     switched_out=True,
                     cpu_id=(i),
                 )

@@ -121,6 +121,8 @@ class X86O3CPUChipletized(X86O3CPU):
         issueToExecuteDelay,
         iewToCommitDelay,
         renameToROBDelay,
+        backComSize,
+        forwardComSize,
         *args,
         **kwargs
     ):
@@ -141,8 +143,8 @@ class X86O3CPUChipletized(X86O3CPU):
         self.issueToExecuteDelay = issueToExecuteDelay
         self.iewToCommitDelay = iewToCommitDelay
         self.renameToROBDelay = renameToROBDelay
-        self.backComSize = 20
-        self.forwardComSize = 20
+        self.backComSize = backComSize
+        self.forwardComSize = forwardComSize
 
 
 class X86MinorCPU(BaseMinorCPU, X86CPU):

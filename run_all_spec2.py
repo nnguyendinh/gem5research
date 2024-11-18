@@ -220,15 +220,22 @@ redirect = args.redirect
 # these are the params you want to change accross each run. For example, "cache miss latency" may be one paramter you want to see given multiple benchmarks
 # set these as key value pairs
 permutable_params = {
-    "fetchToDecodeDelay": [1],
-    "decodeToRenameDelay": [1],
-    "renameToIEWDelay": [1, 5, 20],
-    "sys_clock": ["1GHz", "2GHz"],
+    "renameToFetchDelay": [4],
+    "iewToFetchDelay": [4],
+    "fetchToDecodeDelay": [4],
+    "sys_clock": ["2GHz"],
+    "forwardComSize": [10],
+    "backComSize": [10],
 }
-all_permutations = [
-    dict(zip(permutable_params.keys(), p))
-    for p in product(*permutable_params.values())
-]
+# all_permutations = [
+#     dict(zip(permutable_params.keys(), p))
+#     for p in product(*permutable_params.values())
+# ]
+
+# Frick this im just gonna set it myself
+all_permutations = [{'iewToCommitDelay': 1, 'sys_clock': '2GHz', 'forwardComSize': 10, 'backComSize': 10}, {'iewToCommitDelay': 2, 'sys_clock': '2GHz', 'forwardComSize': 10, 'backComSize': 10}, {'iewToCommitDelay': 4, 'sys_clock': '2GHz', 'forwardComSize': 10, 'backComSize': 10}]
+
+print(all_permutations)
 
 print(json.dumps(all_permutations, indent=4))
 # permutable_params = []

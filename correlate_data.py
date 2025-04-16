@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 # Load the stats from "after" simulations into a structured format
 # Replace 'path/to/stats.csv' with the actual path to your data file
 # Assumes a CSV file where each row corresponds to a simulation, and columns are stats and performance metrics
-stats_file = 'all_data.csv'
+stats_file = 'cycle_counts.csv'
 data = pd.read_csv(stats_file)
 pd.set_option('display.max_rows', None)
 
